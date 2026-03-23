@@ -1,197 +1,149 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'auth.dart';
+import 'login.dart';
 
-/// Dummy data for demonstration.
-/// Replace with your actual data source.
+class profile extends StatelessWidget {
+  const profile({super.key});
 
-class ParallaxRecipe extends StatelessWidget {
-  const ParallaxRecipe({super.key});
+  Future<void> _logout(BuildContext context) async {
+    await AuthService().signOut();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => smthng()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+        backgroundColor: Colors.black87,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () => _logout(context),
+          ),
+        ],
+      ),
+      body: Stack(
         children: [
-          for (final location in locations)
-            LocationListItem(
-              imageUrl: location.imageUrl,
-              name: location.name,
-              country: location.place,
+          // Background image
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/yu.jpeg'),
+                fit: BoxFit.cover,
+              ),
             ),
+          ),
+          // Semi-transparent overlay
+          Container(color: Colors.black.withOpacity(0.6)),
+          // Profile form
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 28.0, vertical: 32.0),
+                margin: EdgeInsets.symmetric(horizontal: 18.0, vertical: 32.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.90),
+                  borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Profile Details',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        letterSpacing: 1.2,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 28),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Enter your name',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        prefixIcon: Icon(Icons.person_outline),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 18),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Enter your email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        prefixIcon: Icon(Icons.email_outlined),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 18),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Enter your phone number',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        prefixIcon: Icon(Icons.phone_outlined),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 18),
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Enter your Address',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        prefixIcon: Icon(Icons.home_outlined),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black87,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
-
-@immutable
-class LocationListItem extends StatelessWidget {
-  const LocationListItem({
-    super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.country,
-  });
-
-  final String imageUrl;
-  final String name;
-  final String country;
-
-  @override
-  Widget build(BuildContext context) {
-    final backgroundImageKey = GlobalKey();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              _buildParallaxBackground(context, backgroundImageKey),
-              _buildGradient(),
-              _buildTitleAndSubtitle(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildParallaxBackground(BuildContext context, GlobalKey backgroundImageKey) {
-    return Flow(
-      delegate: ParallaxFlowDelegate(
-        scrollable: Scrollable.of(context),
-        listItemContext: context,
-        backgroundImageKey: backgroundImageKey,
-      ),
-      children: [
-        Image.asset(imageUrl, key: backgroundImageKey, fit: BoxFit.cover),
-      ],
-    );
-  }
-
-  Widget _buildGradient() {
-    return Positioned.fill(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [const Color.fromARGB(26, 247, 242, 234), Colors.black.withOpacity(0.7)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: const [0.6, 0.95],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTitleAndSubtitle() {
-    return Positioned(
-      left: 20,
-      bottom: 20,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            country,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ParallaxFlowDelegate extends FlowDelegate {
-  ParallaxFlowDelegate({
-    required this.scrollable,
-    required this.listItemContext,
-    required this.backgroundImageKey,
-  }) : super(repaint: scrollable.position);
-
-  final ScrollableState scrollable;
-  final BuildContext listItemContext;
-  final GlobalKey backgroundImageKey;
-
-  @override
-  BoxConstraints getConstraintsForChild(int i, BoxConstraints constraints) {
-    return BoxConstraints.tightFor(width: constraints.maxWidth);
-  }
-
-  @override
-  void paintChildren(FlowPaintingContext context) {
-    // Calculate the position of this list item within the viewport.
-    final scrollableBox = scrollable.context.findRenderObject() as RenderBox;
-    final listItemBox = listItemContext.findRenderObject() as RenderBox;
-    final listItemOffset = listItemBox.localToGlobal(
-      listItemBox.size.centerLeft(Offset.zero),
-      ancestor: scrollableBox,
-    );
-
-    // Determine the percent position of this list item within the scrollable area.
-    final viewportDimension = scrollable.position.viewportDimension;
-    final scrollFraction = (listItemOffset.dy / viewportDimension).clamp(
-      0.0,
-      1.0,
-    );
-
-    // Calculate the vertical alignment of the background based on the scroll percent.
-    final verticalAlignment = Alignment(0.0, scrollFraction * 2 - 1);
-
-    // Convert the background alignment into a pixel offset for painting purposes.
-    final backgroundSize =
-        (backgroundImageKey.currentContext!.findRenderObject() as RenderBox)
-            .size;
-    final listItemSize = context.size;
-    final childRect = verticalAlignment.inscribe(
-      backgroundSize,
-      Offset.zero & listItemSize,
-    );
-
-    // Paint the background.
-    context.paintChild(
-      0,
-      transform: Transform.translate(
-        offset: Offset(0.0, childRect.top),
-      ).transform,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant ParallaxFlowDelegate oldDelegate) {
-    return scrollable != oldDelegate.scrollable ||
-        listItemContext != oldDelegate.listItemContext ||
-        backgroundImageKey != oldDelegate.backgroundImageKey;
-  }
-}
-
-// Optionally, define a Location class for your data model.
-class Location {
-  final String imageUrl;
-  final String name;
-  final String place;
-  Location({required this.imageUrl, required this.name, required this.place});
-}
-
-final locations = [
-  Location(imageUrl: 'lib/we.jpeg', name: 'Mikasa', place: 'Attack on Titan'),
-  Location(imageUrl: 'lib/tu.jpeg', name: 'Hinata', place: 'Naruto'),
-  Location(imageUrl: 'lib/as.jpeg', name: 'Asuna', place: 'Sword Art Online'),
-    Location(imageUrl: 'lib/asset/oo.jpeg', name: 'Vincen', place: 'Hanotoka'),
-  Location(imageUrl: 'lib/mu.jpeg', name: 'Nezuko', place: 'Demon Slayer'),
-  Location(imageUrl: 'lib/ok.jpeg', name: 'Bulma', place: 'Dragon Ball)'),
-  Location(imageUrl: 'lib/lu.jpeg', name: 'Winry', place: 'Bleach'),
-   Location(imageUrl: 'lib/su.jpeg', name: 'Winry', place: 'Bleach'),
-  Location(imageUrl: 'lib/pl.jpeg', name: 'Sandhy', place: 'Bleach'),
-  Location(imageUrl: 'lib/ko.jpeg', name: 'Maddy', place: 'Bleach'),
-
-];

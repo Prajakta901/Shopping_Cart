@@ -1,9 +1,13 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:Katty/login.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'package:video_player/video_player.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -143,6 +147,7 @@ class _StartPageState extends State<StartPage> {
               ),
             );
           }),
+          Container(child: smthng()),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -168,14 +173,34 @@ class din {
 }
 
 final List<din> inp = [
-  din("Pizza", "lib/asset/aa.jpeg", "Delicious cheese pizza"),
-  din("Burger", "lib/asset/bb.jpeg", "Juicy  burger"),
-  din("Pasta", "lib/asset/cc.jpeg", "Italian pasta with sauce"),
-   din("Nashta", "lib/asset/dd.jpeg", "Italian pasta with sauce"),
-  din("Dhokla", "lib/asset/ee.jpeg", "Italian pasta with sauce"),
-  din("Kadhi", "lib/asset/ff.jpeg", "Italian pasta with sauce"),
-  din("Mango", "lib/asset/ii.jpeg", "Italian pasta with sauce"),
-  din("Strawberry", "lib/asset/jj.jpeg", "Italian pasta with sauce"),
+  din("Anya", "lib/asset/_.jpeg", "A girl with a dream to become Spy."),
+  din(
+    "Luffy",
+    "lib/asset/us.jpeg",
+    "The rubber-powered captain seeking One Piece.",
+  ),
+  din(
+    "Goku",
+    "lib/asset/cc.jpeg",
+    "Saiyan warrior always striving to be stronger.",
+  ),
+  din("Sakura", "lib/asset/use.jpeg", "A skilled ninja and medical expert."),
+  din(
+    "Levi",
+    "lib/asset/usee.jpeg",
+    "Humanity's strongest soldier from Attack on Titan.",
+  ),
+  din(
+    "Deku",
+    "lib/asset/ff.jpeg",
+    "Aspiring hero with the power of One For All.",
+  ),
+  din(
+    "Nezuko",
+    "lib/asset/ii.jpeg",
+    "A demon girl fighting to protect her brother.",
+  ),
+  din("Rem", "lib/asset/jj.jpeg", "A loyal and powerful maid from Re:Zero."),
 ];
 
 List<din> cartItm = [];

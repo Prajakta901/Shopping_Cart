@@ -1,8 +1,11 @@
+import 'package:Katty/profile.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'CartPg.dart';
-import 'profile.dart';
+import 'explore.dart';
 import 'detail.dart' as detail_page;
+import 'login.dart';
+
 
 class HomePg extends StatefulWidget {
   const HomePg({super.key, required this.thng});
@@ -13,38 +16,44 @@ class HomePg extends StatefulWidget {
 }
 
 class _HomePgState extends State<HomePg> {
+    int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(190), // Increased height for search bar
-        child: AppBar(
-          backgroundColor: const Color.fromARGB(255, 21, 114, 154),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
+         appBar: PreferredSize(
+  preferredSize: Size.fromHeight(100.0), // Set your custom height
+  child: AppBar(
+    backgroundColor: Color(0xFFE3F2FD), // Soft pastel blue
+    title: Text('Home Page', style: TextStyle(color: Colors.black)),
+    actions: [
+      IconButton(
+        icon: Icon(Icons.account_circle, color: Colors.black),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => profile()),
+          );
+        },
+      ),
+    ],
+    bottom: PreferredSize(
+      preferredSize: Size.fromHeight(50.0),
+      child: Padding(
+        padding: EdgeInsets.all(6.0),
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: 'Search...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
             ),
+            filled: true,
+            fillColor: Colors.white,
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              SizedBox(height: 50),
-              Container(
-                height: 40,
-                width: 500,
-                child: Text(
-                  'Home Page',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 223, 244, 237),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-
+        ),
+      ),
+    ),
+  ),
+),
               // SizedBox(height: 20),
               // Container(
               //   height: 40,
@@ -60,11 +69,7 @@ class _HomePgState extends State<HomePg> {
               //       contentPadding: EdgeInsets.symmetric(vertical: 10),
               //     ),
               //   ),
-              // ),
-            ],
-          ),
-        ),
-      ),
+           
       body: Stack(
         children: [
           Container(
@@ -76,7 +81,7 @@ class _HomePgState extends State<HomePg> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 20, bottom: 15,left: 8.0, right: 8.0),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -101,14 +106,13 @@ class _HomePgState extends State<HomePg> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    detail_page.DetailScreen(
-                                      detail: detail_page.Detail(
-                                        itm.name,
-                                        itm.img,
-                                        itm.des,
-                                      ),
-                                    ),
+                                builder: (context) => detail_page.DetailScreen(
+                                  detail: detail_page.Detail(
+                                    itm.name,
+                                    itm.img,
+                                    itm.des,
+                                  ),
+                                ),
                               ),
                             );
                           },
@@ -153,8 +157,16 @@ class _HomePgState extends State<HomePg> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        elevation: 10,
+        currentIndex: _selectedIndex,
         onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
           if (index == 1) {
             Navigator.push(
               context,
@@ -167,14 +179,30 @@ class _HomePgState extends State<HomePg> {
               MaterialPageRoute(builder: (context) => ParallaxRecipe()),
             );
           }
+          if (index == 3) {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => profile()),
+            );
+          }
         },
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
       ),
     );
