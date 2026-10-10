@@ -44,7 +44,8 @@ class _smthngState extends State<smthng> {
             color: Colors.black.withOpacity(0.5),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 300.0, right: 50, left: 50),
+            padding: const EdgeInsets.only(
+              top: 300.0, right: 50, left: 50),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
